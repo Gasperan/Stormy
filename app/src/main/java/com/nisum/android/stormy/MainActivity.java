@@ -23,10 +23,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         String apiKey = "8d1c8bed6e1a54a670bf29c94855dbc3";
-        latitude = 37.8267 ;
+        latitude = 9999;//37.8267 ;
         longitude = -122.423;
         String forecastURL = "https://api.forecast.io/forecast/"+ apiKey+"/"+latitude+","+longitude;
 
+        //creating request
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(forecastURL)
@@ -44,11 +45,18 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if(response.isSuccessful()) {
                         Log.v(TAG, response.body().string());
+                    }else {
+                        alertUser();
                     }
                 } catch (IOException e) {
                     Log.e(TAG,"Exception caught: ", e);
                 }
             }
         });
+    }
+
+    private void alertUser() {
+        AlertDialogFragment dialog = new AlertDialogFragment();
+        dialog.show(getFragmentManager(),"error dialog");
     }
 }
