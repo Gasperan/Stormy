@@ -26,6 +26,6 @@
         android:id="@+id/degreeImageView"
         android:layout_alignTop="@+id/temperatureLabel"
         android:layout_toEndOf="@+id/temperatureLabel"
-        android:src="@android:drawable/presence_online"
+        android:src="@drawable/degree"
         android:layout_marginTop="50dp" />
 </RelativeLayout>
