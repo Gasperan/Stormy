@@ -1,8 +1,15 @@
 package com.nisum.android.stormy;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -16,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
     public static final String TAG = MainActivity.class.getSimpleName();
+    private CurrentWeather mCurrentWeather;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,31 +37,70 @@ public class MainActivity extends AppCompatActivity {
         String forecastURL = "https://api.forecast.io/forecast/"+ apiKey+"/"+latitude+","+longitude;
 
         //creating request
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(forecastURL)
-                .build();
+        if (isNetWorkAvailable()) {
 
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(forecastURL)
+                    .build();
 
-            }
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    if(response.isSuccessful()) {
-                        Log.v(TAG, response.body().string());
-                    }else {
-                        alertUser();
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG,"Exception caught: ", e);
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    try {
+                        String jsonDatata = response.body().string();
+                        Log.v(TAG, jsonDatata);
+                        if (response.isSuccessful()) {
+                            mCurrentWeather = getCurrentDetails(jsonDatata);
+                        } else {
+                            alertUser();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    }  catch (JSONException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(this,"Network is unavailable",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+        Log.i(TAG, "From Json" + timezone);
+
+        JSONObject currently = forecast.getJSONObject("currently");
+
+        CurrentWeather currentWeather = new CurrentWeather();
+        currentWeather.setHumidity(currently.getDouble("humidity"));
+        currentWeather.setTime(currently.getLong("time"));
+        currentWeather.setIcon(currently.getString("icon"));
+        currentWeather.setPrecipChence(currently.getDouble("precipProbability"));
+        currentWeather.setSummary(currently.getString("summary"));
+        currentWeather.setTemperature(currently.getDouble("temperature"));
+        currentWeather.setTimeZone(timezone);
+
+        return new CurrentWeather();
+    }
+
+    private boolean isNetWorkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
     }
 
     private void alertUser() {
