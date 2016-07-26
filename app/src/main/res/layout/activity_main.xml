@@ -42,7 +42,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alcatraz Island"
+        android:text="Santiago de Chile"
         android:textColor="@android:color/white"
         android:id="@+id/locationLabel"
         android:textSize="24sp"
@@ -65,13 +65,15 @@
         android:layout_below="@+id/temperatureLabel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:weightSum="100">
+        android:weightSum="100"
+        android:id="@+id/linearLayout">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="50">
+            android:layout_weight="50"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,21 +95,49 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="50">
+            android:layout_weight="50"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
+                android:text="precip"
                 android:textColor="@android:color/white"
-                android:id="@+id/textView" />
+                android:id="@+id/precipLabel" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
+                android:text="0.23"
+                android:textSize="24sp"
                 android:textColor="@android:color/white"
-                android:id="@+id/textView2" />
+                android:id="@+id/precipValue" />
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="have a nice day"
+        android:id="@+id/summaryLabel"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/refreshImageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/refresh" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/refreshImageView" />
 </RelativeLayout>

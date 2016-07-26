@@ -3,6 +3,7 @@ package com.nisum.android.stormy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
 
 public class CurrentWeather {
     private String mIcon;
@@ -80,8 +81,8 @@ public class CurrentWeather {
         mTime = time;
     }
 
-    public double getTemperature() {
-        return mTemperature;
+    public int getTemperature() {
+        return (int) Math.round(mTemperature);
     }
 
     public void setTemperature(double temperature) {
@@ -97,7 +98,7 @@ public class CurrentWeather {
     }
 
     public double getPrecipChence() {
-        return mPrecipChence;
+        return Math.round(mPrecipChence*100);
     }
 
     public void setPrecipChence(double precipChence) {
@@ -111,4 +112,5 @@ public class CurrentWeather {
     public void setSummary(String summary) {
         mSummary = summary;
     }
+
 }
